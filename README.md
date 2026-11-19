@@ -7,14 +7,15 @@ before your patience with the house runs out.
 ## Requirements
 
 - **Godot 4.7+** (developed with 4.7.2, GL Compatibility renderer). No external
-  runtime dependencies.
+  runtime dependencies. On Windows the console executable may be named
+  `godot_console.exe` instead of `godot` — use whichever is on your `PATH`.
 
 ## Play
 
 1. Open `project.godot` in Godot and press **F5**, or run:
 
    ```powershell
-   & "C:\Users\Shayan\Apps\Godot\4.7.2\godot_console.exe" --path .
+   godot --path .
    ```
 
 2. **WASD** or the **arrow keys** move the player. The camera follows.
@@ -77,7 +78,7 @@ push the player around.
 A quick headless load should exit cleanly with no script errors:
 
 ```powershell
-& "C:\Users\Shayan\Apps\Godot\4.7.2\godot_console.exe" --headless --path . --quit-after 20
+godot --headless --path . --quit-after 20
 ```
 
 ## License

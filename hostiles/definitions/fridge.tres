@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="HostileData" format=3 uid="uid://deinbc0dv74ji"]
+
+[ext_resource type="Script" uid="uid://tf416ktwdba7" path="res://hostiles/hostile_data.gd" id="1_hostiledata"]
+
+[resource]
+script = ExtResource("1_hostiledata")
+id = &"fridge"
+name = "Fridge"
+description = "A tall white refrigerator. It watches the room, and its door swings open when it notices you."
+size = Vector2(72, 110)
+idle_color = Color(1, 1, 1, 1)
+active_color = Color(1, 0.97, 0.9, 1)
+disabled_color = Color(0.55, 0.57, 0.6, 1)
+active_scale = Vector2(1.7, 1)
+solid = true
+wake_seconds = 5.0
+disable_seconds = 15.0
+sight_radius = 240.0
+sight_angle_deg = 140.0
+disable_item = &"emp_gadget"

@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://bb24yrw0mue05"]
+
+[ext_resource type="Script" uid="uid://stybc64k0nm8" path="res://interactions/interactable_object.gd" id="1_interactable"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
+resource_local_to_scene = true
+size = Vector2(76, 126)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_blocker"]
+resource_local_to_scene = true
+size = Vector2(56, 56)
+
+[node name="InteractableObject" type="Area2D" unique_id=941798209]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("1_interactable")
+
+[node name="Shape" type="CollisionShape2D" parent="." unique_id=1694819233]
+position = Vector2(10, 35)
+rotation = 1.5865043
+shape = SubResource("RectangleShape2D_body")
+
+[node name="Blocker" type="StaticBody2D" parent="."]
+collision_layer = 0
+collision_mask = 0
+
+[node name="Collision" type="CollisionShape2D" parent="Blocker"]
+shape = SubResource("RectangleShape2D_blocker")

@@ -1,0 +1,16 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://items/pickable_item.gd" id="1_pickable"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_pickup"]
+resource_local_to_scene = true
+radius = 15.0
+
+[node name="PickableItem" type="Area2D"]
+collision_layer = 2
+collision_mask = 0
+input_pickable = true
+script = ExtResource("1_pickable")
+
+[node name="Shape" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_pickup")

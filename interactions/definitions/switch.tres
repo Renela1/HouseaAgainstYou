@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="InteractableData" format=3 uid="uid://duq15n2tihniq"]
+
+[ext_resource type="Script" uid="uid://dk02fypx8gnrl" path="res://interactions/interactable_data.gd" id="1_data"]
+[ext_resource type="Script" uid="uid://6i0ppf4pawpe" path="res://interactions/interaction_rule.gd" id="1_mnixl"]
+
+[resource]
+script = ExtResource("1_data")
+id = &"power_switch"
+name = "Power Switch"
+description = "A stubby lever. Nothing is stopping you from pulling it."
+solid = true
+refusal_text = "The lever will not budge."
+color = Color(0.55, 0.47, 0.36, 1)
+size = Vector2(44, 44)

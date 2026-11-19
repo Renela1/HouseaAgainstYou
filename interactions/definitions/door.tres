@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="InteractableData" format=3 uid="uid://rv667yqfy4fi"]
+
+[ext_resource type="Script" uid="uid://dk02fypx8gnrl" path="res://interactions/interactable_data.gd" id="1_data"]
+[ext_resource type="Script" uid="uid://6i0ppf4pawpe" path="res://interactions/interaction_rule.gd" id="1_fylcu"]
+[ext_resource type="Resource" uid="uid://hprwy3s44lio" path="res://interactions/definitions/needs_key.tres" id="2_rule"]
+
+[resource]
+script = ExtResource("1_data")
+id = &"cell_door"
+name = "Cell Door"
+description = "A barred door with a single keyhole."
+kind = 1
+rules = Array[ExtResource("1_fylcu")]([ExtResource("2_rule")])
+one_shot = true
+solid = true
+refusal_text = "The cell door is already open."
+success_color = Color(0.3, 0.72, 0.42, 1)
+success_scale = Vector2(0.55, 1)
+color = Color(0.62, 0.42, 0.3, 1)
+size = Vector2(68, 92)

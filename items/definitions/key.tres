@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://items/item_data.gd" id="1_itemdata"]
+
+[resource]
+script = ExtResource("1_itemdata")
+id = &"key"
+name = "Rusty Key"
+description = "A small iron key. Fits the cell door."
+kind = 1
+stackable = false
+max_stack_size = 1
+key_id = &"cell_door"
+color = Color(0.72, 0.74, 0.8, 1)
+radius = 8.0

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://items/item_data.gd" id="1_itemdata"]
+
+[resource]
+script = ExtResource("1_itemdata")
+id = &"emp_gadget"
+name = "EMP Gadget"
+description = "A palm-sized jammer. Hold it near a machine to shut it down for good."
+kind = 3
+stackable = false
+max_stack_size = 1
+color = Color(0.35, 0.85, 0.95, 1)
+radius = 9.0

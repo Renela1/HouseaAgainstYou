@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="InteractableData" format=3]
+
+[ext_resource type="Script" path="res://interactions/interactable_data.gd" id="1_data"]
+
+[resource]
+script = ExtResource("1_data")
+id = &"final_door"
+name = "Final Door"
+description = "The way out of the house. It answers only to the golden key."
+kind = 1
+one_shot = false
+solid = true
+refusal_text = "The final door is closed."
+success_color = Color(0.12, 0.1, 0.07, 1)
+success_scale = Vector2(0.16, 1)
+pulse = false
+shape = 0
+color = Color(0.86, 0.7, 0.28, 1)
+size = Vector2(84, 140)

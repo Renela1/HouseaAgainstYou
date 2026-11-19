@@ -1,0 +1,85 @@
+# House Against You
+
+A small, data-driven 2D escape-room prototype in **Godot 4.7**. Pick up keys,
+work around the house's hostile watchers, and get out through the final door
+before your patience with the house runs out.
+
+## Requirements
+
+- **Godot 4.7+** (developed with 4.7.2, GL Compatibility renderer). No external
+  runtime dependencies.
+
+## Play
+
+1. Open `project.godot` in Godot and press **F5**, or run:
+
+   ```powershell
+   & "C:\Users\Shayan\Apps\Godot\4.7.2\godot_console.exe" --path .
+   ```
+
+2. **WASD** or the **arrow keys** move the player. The camera follows.
+3. **Left-click** an object while the player's faint reach ring overlaps it to
+   interact. Clicking something out of reach is refused with on-screen feedback.
+4. Explore, collect the **golden key**, and interact with every hostile to calm
+   it (`IDLE`) or shut it down with the **EMP gadget** (`DISABLED`).
+5. Reach the **final door** with the golden key while all hostiles are disabled.
+   A failed attempt wakes any idle hostiles and costs one unit of patience; when
+   the patience meter fills you still leave — but the house burns, and the level
+   restarts with pickups and consumables restored.
+
+## How it works
+
+Everything gameplay-related is defined in `Resource` files, so new objects need
+no new scripts:
+
+| Folder | Contents |
+| --- | --- |
+| `items/` | `ItemData` (one resource per item), `PickableItem`, inventory UI, `definitions/*.tres` |
+| `interactions/` | `InteractableData`, `InteractionRule`, `InteractableObject`, `FinalDoor`, `definitions/*.tres` |
+| `hostiles/` | `HostileData`, `HostileObject`, `definitions/*.tres` |
+| `components/` | `InteractZone` — the shared reach/click gatekeeper for pickups, objects and hostiles |
+| `systems/` | `Inventory` autoload (12 slots, item queries, reset) |
+| `ui/` | Inventory HUD and the patience meter |
+| `addons/godot_mcp/` | Optional editor tooling for the Godot MCP bridge; not needed to play |
+
+### Interactables
+
+An `InteractableData` resource describes the look, the `solid` collision flag,
+and a list of `InteractionRule`s (required inventory item, optional consumable,
+success/failure text). Doors drop their blocker when opened; fixtures stay
+solid. `FinalDoor` extends `InteractableObject` and reuses the same reach and
+click routing while adding the key gate, hostile wake-up logic and patience.
+
+### Hostiles
+
+Each hostile runs its own state machine and timers, all configured on its
+`HostileData` resource:
+
+- `IDLE` — counts down `wake_seconds` (0 disables the countdown). If the player
+  stands in its sight cone, the countdown **stops and resets**, resuming at full
+  length when the player looks away.
+- `ACTIVE` — alert and latched. If the player enters its sight cone it enters
+  `HIDE` instead.
+- `HIDE` — alert but hiding from the player's gaze; returns to `ACTIVE` when the
+  player leaves its line of sight.
+- `DISABLED` — has no sight at all. Counts down `disable_seconds` and comes back
+  when it expires (0 = stays down permanently).
+
+Interacting normally calms a hostile to `IDLE` (with a short blind grace period);
+interacting while carrying the EMP gadget disables it. Every state can have its
+own colour and, when a `SpriteFrames` resource is assigned, its own animation
+(`idle`, `active`, `hide`, `disabled`). Hostiles are solid in every state; the
+collision blocker always uses the base size so an active scale change cannot
+push the player around.
+
+## Verification
+
+A quick headless load should exit cleanly with no script errors:
+
+```powershell
+& "C:\Users\Shayan\Apps\Godot\4.7.2\godot_console.exe" --headless --path . --quit-after 20
+```
+
+## License
+
+MIT — see [LICENSE](LICENSE).

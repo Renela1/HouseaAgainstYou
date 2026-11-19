@@ -1,0 +1,29 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://hostiles/hostile_object.gd" id="1_hostile"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
+resource_local_to_scene = true
+size = Vector2(64, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_blocker"]
+resource_local_to_scene = true
+size = Vector2(64, 64)
+
+[node name="HostileObject" type="Area2D"]
+collision_layer = 2
+collision_mask = 0
+input_pickable = true
+script = ExtResource("1_hostile")
+
+[node name="Shape" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_body")
+
+[node name="Blocker" type="StaticBody2D" parent="."]
+collision_layer = 0
+collision_mask = 0
+
+[node name="Collision" type="CollisionShape2D" parent="Blocker"]
+shape = SubResource("RectangleShape2D_blocker")
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]

@@ -1,0 +1,179 @@
+[gd_scene format=3 uid="uid://cngg0kiwx2to"]
+
+[ext_resource type="Script" uid="uid://qvllqa2ytawa" path="res://player.gd" id="1_0xm2m"]
+[ext_resource type="Shape2D" uid="uid://dc242ktu2ft3b" path="res://player_shape.tres" id="2_h2yge"]
+[ext_resource type="SpriteFrames" path="res://art/player_frames.tres" id="3_1bvp3"]
+[ext_resource type="Shape2D" uid="uid://35y7bctowhoe" path="res://wall_shape.tres" id="3_h2yge"]
+[ext_resource type="Script" uid="uid://bsj4jj56l5m5g" path="res://components/interact_zone.gd" id="4_4c57u"]
+[ext_resource type="Shape2D" uid="uid://bpj66nopli5mf" path="res://components/interact_range_shape.tres" id="5_efxa6"]
+[ext_resource type="PackedScene" path="res://items/pickable_item.tscn" id="9_dg77c"]
+[ext_resource type="Resource" uid="uid://b1ne08s8nq3v4" path="res://items/definitions/coin.tres" id="10_ycdy4"]
+[ext_resource type="Script" uid="uid://cfeumw7rnkanm" path="res://ui/inventory_hud.gd" id="11_efxa6"]
+[ext_resource type="Resource" path="res://items/definitions/key.tres" id="12_2cqfq"]
+[ext_resource type="PackedScene" uid="uid://bb24yrw0mue05" path="res://interactions/interactable_object.tscn" id="13_yaehf"]
+[ext_resource type="Resource" uid="uid://duq15n2tihniq" path="res://interactions/definitions/switch.tres" id="14_074og"]
+[ext_resource type="Resource" uid="uid://rv667yqfy4fi" path="res://interactions/definitions/door.tres" id="15_cegan"]
+[ext_resource type="Resource" uid="uid://bk30ut5sp732h" path="res://interactions/definitions/sentry.tres" id="16_82xsv"]
+[ext_resource type="PackedScene" path="res://hostiles/hostile_object.tscn" id="17_hostile"]
+[ext_resource type="Resource" uid="uid://deinbc0dv74ji" path="res://hostiles/definitions/fridge.tres" id="18_fridge"]
+[ext_resource type="Resource" path="res://items/definitions/emp_gadget.tres" id="19_gadget"]
+[ext_resource type="PackedScene" path="res://interactions/final_door.tscn" id="20_finaldoor"]
+[ext_resource type="Resource" path="res://interactions/definitions/final_door.tres" id="21_finaldata"]
+[ext_resource type="Resource" path="res://items/definitions/golden_key.tres" id="22_goldenkey"]
+[ext_resource type="Script" uid="uid://bh2a7c3wlttow" path="res://ui/patience_meter.gd" id="23_patience"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_patience_bg"]
+bg_color = Color(0.1, 0.1, 0.12, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_patience_fill"]
+bg_color = Color(0.86, 0.36, 0.3, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[node name="Main" type="Node2D" unique_id=1991856745]
+
+[node name="Player" type="CharacterBody2D" parent="." unique_id=1867231781 groups=["player"]]
+position = Vector2(640, 360)
+script = ExtResource("1_0xm2m")
+
+[node name="Collision" type="CollisionShape2D" parent="Player" unique_id=1267283837]
+position = Vector2(0, -10)
+rotation = 0.033161256
+shape = ExtResource("2_h2yge")
+
+[node name="Sprite" type="AnimatedSprite2D" parent="Player" unique_id=1521470242]
+scale = Vector2(1.5, 1.5)
+sprite_frames = ExtResource("3_1bvp3")
+animation = &"idle"
+autoplay = "idle"
+frame_progress = 0.43522194
+offset = Vector2(0, -31)
+
+[node name="InteractRange" type="Area2D" parent="Player" unique_id=161767710]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("4_4c57u")
+
+[node name="Shape" type="CollisionShape2D" parent="Player/InteractRange" unique_id=1958767329]
+shape = ExtResource("5_efxa6")
+
+[node name="Camera" type="Camera2D" parent="Player" unique_id=1879646207]
+offset = Vector2(0, -46)
+process_callback = 0
+position_smoothing_enabled = true
+
+[node name="Wall" type="StaticBody2D" parent="." unique_id=208188121]
+position = Vector2(900, 360)
+
+[node name="Collision" type="CollisionShape2D" parent="Wall" unique_id=869916]
+position = Vector2(-1, -185)
+shape = ExtResource("3_h2yge")
+
+[node name="Collision2" type="CollisionShape2D" parent="Wall" unique_id=1545641622]
+position = Vector2(0, 300)
+shape = ExtResource("3_h2yge")
+
+[node name="Visual2" type="Polygon2D" parent="Wall" unique_id=630577340]
+position = Vector2(0, 299)
+color = Color(0.85, 0.35, 0.35, 1)
+polygon = PackedVector2Array(-20, -200, 20, -200, 20, 200, -20, 200)
+
+[node name="Visual" type="Polygon2D" parent="Wall" unique_id=1270469794]
+position = Vector2(-1, -185)
+color = Color(0.85, 0.35, 0.35, 1)
+polygon = PackedVector2Array(-20, -200, 20, -200, 20, 200, -20, 200)
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1962255316]
+
+[node name="Coin" parent="." unique_id=173381547 instance=ExtResource("9_dg77c")]
+position = Vector2(700, 200)
+item = ExtResource("10_ycdy4")
+
+[node name="InventoryHUD" type="CanvasLayer" parent="." unique_id=1217420527]
+script = ExtResource("11_efxa6")
+
+[node name="Panel" type="PanelContainer" parent="InventoryHUD" unique_id=524567943]
+offset_left = 16.0
+offset_top = 552.0
+offset_right = 316.0
+offset_bottom = 704.0
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="InventoryHUD/Panel" unique_id=2080525814]
+layout_mode = 2
+text = "Inventory: empty"
+
+[node name="Message" type="PanelContainer" parent="InventoryHUD" unique_id=127371197]
+visible = false
+offset_left = 440.0
+offset_top = 20.0
+offset_right = 840.0
+offset_bottom = 64.0
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="InventoryHUD/Message" unique_id=581721292]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="Patience" type="VBoxContainer" parent="InventoryHUD" unique_id=285376753]
+offset_left = 992.0
+offset_top = 16.0
+offset_right = 1264.0
+offset_bottom = 72.0
+mouse_filter = 2
+
+[node name="Title" type="Label" parent="InventoryHUD/Patience" unique_id=5888462]
+layout_mode = 2
+text = "Patience"
+horizontal_alignment = 2
+
+[node name="Bar" type="ProgressBar" parent="InventoryHUD/Patience" unique_id=2142291101]
+custom_minimum_size = Vector2(0, 14)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_patience_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_patience_fill")
+max_value = 4.0
+step = 1.0
+show_percentage = false
+script = ExtResource("23_patience")
+
+[node name="Key" parent="." unique_id=2119562243 instance=ExtResource("9_dg77c")]
+position = Vector2(430, 520)
+item = ExtResource("12_2cqfq")
+
+[node name="Switch" parent="." unique_id=334976932 instance=ExtResource("13_yaehf")]
+position = Vector2(420, 250)
+data = ExtResource("14_074og")
+
+[node name="Door" parent="." unique_id=1766542997 instance=ExtResource("13_yaehf")]
+position = Vector2(444, 388)
+data = ExtResource("15_cegan")
+
+[node name="Sentry" parent="." unique_id=1565245808 instance=ExtResource("13_yaehf")]
+z_index = -1
+position = Vector2(400, 640)
+data = ExtResource("16_82xsv")
+
+[node name="Fridge" parent="." unique_id=1281039073 instance=ExtResource("17_hostile")]
+z_index = -1
+position = Vector2(250, 240)
+data = ExtResource("18_fridge")
+
+[node name="Gadget" parent="." unique_id=1891889351 instance=ExtResource("9_dg77c")]
+position = Vector2(720, 480)
+item = ExtResource("19_gadget")
+
+[node name="GoldenKey" parent="." unique_id=1193908466 instance=ExtResource("9_dg77c")]
+position = Vector2(200, 500)
+item = ExtResource("22_goldenkey")
+
+[node name="FinalDoor" parent="." unique_id=564418462 instance=ExtResource("20_finaldoor")]
+position = Vector2(1200, 360)
+data = ExtResource("21_finaldata")

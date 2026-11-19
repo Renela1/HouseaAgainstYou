@@ -1,0 +1,22 @@
+# Godot 4+ generated files
+.godot/
+/android/
+
+# Imported assets cache (the .import files themselves are committed on purpose)
+.import/
+
+# Exported builds
+export.cfg
+builds/
+export/
+
+# Local scratch / screenshots / logs
+.shots/
+*.log
+*.tmp
+
+# OS and editor cruft
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp

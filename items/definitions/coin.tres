@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://b1ne08s8nq3v4"]
+
+[ext_resource type="Script" uid="uid://cyk4vtl6gnq0s" path="res://items/item_data.gd" id="1_itemdata"]
+
+[resource]
+script = ExtResource("1_itemdata")
+id = &"coin"
+name = "Coin"
+description = "A small brass coin. Placeholder pickup."
+color = Color(0.94902, 0.78, 0.290196, 1)
+radius = 9.0

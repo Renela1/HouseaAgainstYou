@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://items/item_data.gd" id="1_itemdata"]
+
+[resource]
+script = ExtResource("1_itemdata")
+id = &"golden_key"
+name = "Golden Key"
+description = "A heavy brass key, warm to the touch. It unlocks the way out of the house."
+kind = 1
+stackable = false
+max_stack_size = 1
+key_id = &"final_door"
+color = Color(0.95, 0.76, 0.22, 1)
+radius = 9.0

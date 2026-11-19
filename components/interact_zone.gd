@@ -52,13 +52,42 @@ func get_nearest() -> Node2D:
 
 ## The single gatekeeper: refuses anything out of range, otherwise calls
 ## `interact(interactor)` on the target. Pickups and doors both work unchanged.
+## A successful interaction also tells the player which animation to play.
 func request_interact(target: Node2D) -> bool:
 	if target == null or not is_instance_valid(target):
 		return false
 	if not is_in_range(target) or not target.has_method("interact"):
 		interact_refused.emit(target)
 		return false
-	return bool(target.call("interact", get_parent()))
+	# Asked before the call: starting a gadget fix may consume the item that
+	# decides whether this is a disable or a plain hostile interaction.
+	var kind: StringName = _interaction_kind(target)
+	var interacted: bool = bool(target.call("interact", get_parent()))
+	if interacted:
+		_play_interaction(kind)
+	return interacted
+
+
+## The interaction kind, named after the player animation it should play. A
+## target may answer for itself; otherwise its group names the kind.
+func _interaction_kind(target: Node) -> StringName:
+	if target.has_method("interaction_kind"):
+		return StringName(target.call("interaction_kind"))
+	if target.is_in_group("pickables"):
+		return &"pickup"
+	if target.is_in_group("interactables"):
+		return &"interact"
+	if target.is_in_group("hostiles"):
+		return &"hostile_interact"
+	return &"interact"
+
+
+## Hands the kind to the interactor (this zone's parent, the player). Interactors
+## without the method are simply not told.
+func _play_interaction(kind: StringName) -> void:
+	var interactor: Node = get_parent()
+	if interactor != null and interactor.has_method("play_interaction"):
+		interactor.call("play_interaction", kind)
 
 
 func _build_shape() -> void:

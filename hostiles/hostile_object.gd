@@ -20,6 +20,8 @@ extends Area2D
 ## Everything that differs between hostiles lives in `data`; state-specific
 ## actions go in _on_activated() or on the state_changed signal.
 
+const HOVER_OUTLINE_SHADER: Shader = preload("res://shaders/hostile_hover_outline.gdshader")
+
 enum State {
 	IDLE,     ## Default. Watching its cone, counting down to a wake-up.
 	ACTIVE,   ## Woken up; latched until interacted with.
@@ -35,6 +37,10 @@ signal disabled
 ## Emitted when a disabled hostile's counter-disable timer runs out and it
 ## comes back online.
 signal reactivated
+## Emitted when a gadget fix starts or finishes. Hook these later to drive a
+## repair animation on the player sprite.
+signal fix_started(duration: float)
+signal fix_finished
 
 ## Definition of this hostile. Shared resource — never mutated at runtime.
 @export var data: HostileData
@@ -49,6 +55,7 @@ var _grace: float = 0.0
 var _in_reach: bool = false
 var _hovered: bool = false
 var _sprite: AnimatedSprite2D = null
+var _outline_material: ShaderMaterial = null
 ## Seconds left on the running countdown and its starting value (for the bar).
 var _timer: float = 0.0
 var _timer_max: float = 0.0
@@ -56,13 +63,15 @@ var _timer_max: float = 0.0
 var _timer_disabled: bool = false
 ## True while an IDLE countdown is frozen by the player's gaze (inside HIDE).
 var _timer_paused: bool = false
+## True while the player is fitting the disable gadget before DISABLED.
+var _fixing: bool = false
+var _fix_timer: float = 0.0
+var _fix_timer_max: float = 0.0
 
 
 func _ready() -> void:
 	add_to_group("hostiles")
 	input_pickable = true
-	mouse_entered.connect(_on_mouse_entered)
-	mouse_exited.connect(_on_mouse_exited)
 	_sprite = get_node_or_null("Sprite") as AnimatedSprite2D
 	if data == null:
 		push_warning("HostileObject '%s' has no HostileData assigned." % name)
@@ -71,12 +80,18 @@ func _ready() -> void:
 	_apply_solidity()
 	_start_wake_timer()
 	_apply_visuals()
+	_setup_hover_outline()
 	queue_redraw()
 
 
 func _physics_process(delta: float) -> void:
 	if data == null:
 		return
+	if _fixing:
+		_fix_timer = maxf(_fix_timer - delta, 0.0)
+		if is_zero_approx(_fix_timer):
+			_complete_fix()
+		queue_redraw()
 	# Sight is live in every state except DISABLED, grace period included.
 	if state != State.DISABLED:
 		_update_sight()
@@ -91,6 +106,16 @@ func _physics_process(delta: float) -> void:
 	if _grace > 0.0:
 		_grace = maxf(_grace - delta, 0.0)
 		queue_redraw()
+
+
+func _process(_delta: float) -> void:
+	# Hover is measured against the sprite, not the collision shape, so framed
+	# hostiles highlight over their whole visible body.
+	var now_hovered: bool = _is_mouse_over_sprite()
+	if now_hovered != _hovered:
+		_hovered = now_hovered
+		queue_redraw()
+	_sync_hover_outline()
 
 
 ## Watches the player and enters/leaves HIDE without disturbing the underlying
@@ -143,6 +168,8 @@ func calm() -> void:
 func disable() -> void:
 	if data == null or state == State.DISABLED:
 		return
+	if _fixing:
+		_cancel_fix()
 	_aware = false
 	_hide_return = State.IDLE
 	_grace = 0.0
@@ -157,7 +184,7 @@ func disable() -> void:
 func enter_hide() -> void:
 	if data == null or state == State.HIDE:
 		return
-	if state != State.IDLE and state != State.ACTIVE:
+	if state != State.IDLE:
 		return
 	_hide_return = state
 	if state == State.IDLE:
@@ -202,6 +229,16 @@ func time_left() -> float:
 	return _timer
 
 
+## True while the player is fitting the disable gadget.
+func is_fixing() -> bool:
+	return _fixing
+
+
+## Seconds left on the gadget-fix countdown, 0 when not fixing.
+func fix_time_left() -> float:
+	return _fix_timer if _fixing else 0.0
+
+
 ## True when the bag holds this hostile's disable gadget.
 func has_disable_gadget() -> bool:
 	return data != null and data.disable_item != &"" and Inventory.has_item(data.disable_item, 1)
@@ -212,13 +249,23 @@ func has_disable_gadget() -> bool:
 func interact(_interactor: Node) -> bool:
 	if data == null or state == State.DISABLED:
 		return false
+	if _fixing:
+		return true
 	if has_disable_gadget():
-		if data.disable_consume:
-			Inventory.remove_item(data.disable_item, 1)
-		disable()
+		_begin_fix()
 		return true
 	calm()
 	return true
+
+
+## Which player animation this interaction should play: fitting the gadget reads
+## as a disable, a bare interaction as a hostile interaction. Queried before
+## interact(), because beginning a fix may consume the gadget that decides it.
+## An empty kind means this click should not interrupt the player's pose.
+func interaction_kind() -> StringName:
+	if _fixing:
+		return &""
+	return &"disable" if has_disable_gadget() else &"hostile_interact"
 
 
 ## Override for state-specific behaviour when it is alerted.
@@ -239,6 +286,46 @@ func _set_state(next: State) -> void:
 	state = next
 	_apply_visuals()
 	state_changed.emit(previous, next)
+
+
+func _begin_fix() -> void:
+	if _fixing:
+		return
+	_fix_timer_max = maxf(data.fix_seconds, 0.0)
+	_fix_timer = _fix_timer_max
+	_fixing = true
+	if data.disable_consume:
+		Inventory.remove_item(data.disable_item, 1)
+	fix_started.emit(_fix_timer_max)
+	_show_feedback("Fixing %s... %.1fs" % [data.name, _fix_timer_max])
+	if is_zero_approx(_fix_timer):
+		_complete_fix()
+	else:
+		queue_redraw()
+
+
+func _complete_fix() -> void:
+	if not _fixing:
+		return
+	_fixing = false
+	_fix_timer = 0.0
+	fix_finished.emit()
+	disable()
+	_show_feedback("%s disabled." % data.name)
+
+
+func _cancel_fix() -> void:
+	if not _fixing:
+		return
+	_fixing = false
+	_fix_timer = 0.0
+	queue_redraw()
+
+
+func _show_feedback(text: String) -> void:
+	var feedback: Node = get_tree().get_first_node_in_group("interact_feedback")
+	if feedback != null and feedback.has_method("show_message"):
+		feedback.call("show_message", text)
 
 
 ## The auto-wake countdown restarts with the game and after every calm.
@@ -294,6 +381,7 @@ func _apply_visuals() -> void:
 		var animation: StringName = _current_animation()
 		if _sprite.sprite_frames != null and _sprite.sprite_frames.has_animation(animation):
 			_sprite.play(animation)
+	_sync_hover_outline()
 	queue_redraw()
 
 
@@ -387,14 +475,72 @@ func _apply_solidity() -> void:
 			shape_node.set_deferred("disabled", not blocks)
 
 
-func _on_mouse_entered() -> void:
-	_hovered = true
-	queue_redraw()
+func _setup_hover_outline() -> void:
+	if _sprite == null or data == null or data.frames == null:
+		return
+	_outline_material = ShaderMaterial.new()
+	_outline_material.shader = HOVER_OUTLINE_SHADER
+	_outline_material.set_shader_parameter("outline_width", 0.0)
+	_outline_material.set_shader_parameter("outline_tint", data.hover_outline_tint)
+	_sprite.material = _outline_material
+	_sync_hover_outline()
 
 
-func _on_mouse_exited() -> void:
-	_hovered = false
-	queue_redraw()
+func _sync_hover_outline() -> void:
+	if _outline_material == null or _sprite == null or data == null:
+		return
+	_outline_material.set_shader_parameter(
+		"outline_width", data.hover_outline_width if _hovered else 0.0)
+	_outline_material.set_shader_parameter("outline_tint", data.hover_outline_tint)
+	if _sprite.sprite_frames == null:
+		return
+	var frame_tex: Texture2D = _sprite.sprite_frames.get_frame_texture(_sprite.animation, _sprite.frame)
+	if frame_tex == null:
+		return
+	var region_pos: Vector2 = Vector2.ZERO
+	var region_size: Vector2 = Vector2(1, 1)
+	var draw_size: Vector2 = frame_tex.get_size()
+	if frame_tex is AtlasTexture:
+		var atlas_tex: AtlasTexture = frame_tex as AtlasTexture
+		region_pos = atlas_tex.region.position
+		region_size = atlas_tex.region.size
+		draw_size = atlas_tex.region.size
+	_outline_material.set_shader_parameter("atlas_region_pos", region_pos)
+	_outline_material.set_shader_parameter("atlas_region_size", region_size)
+	_outline_material.set_shader_parameter("draw_size", draw_size)
+
+
+func _visual_size() -> Vector2:
+	if data == null:
+		return Vector2.ZERO
+	if _sprite == null or _sprite.sprite_frames == null:
+		return data.size
+	var frame_tex: Texture2D = _sprite.sprite_frames.get_frame_texture(_sprite.animation, _sprite.frame)
+	if frame_tex == null:
+		return data.size
+	var size: Vector2 = frame_tex.get_size()
+	if frame_tex is AtlasTexture:
+		var atlas_tex: AtlasTexture = frame_tex as AtlasTexture
+		size = atlas_tex.region.size
+	if size.x <= 0.0 or size.y <= 0.0:
+		return data.size
+	return size * Vector2(absf(_sprite.scale.x), absf(_sprite.scale.y))
+
+
+## Hover uses the sprite's real on-screen rect, so it works even when the
+## collision shape is sized for gameplay rather than for the artwork.
+func _is_mouse_over_sprite() -> bool:
+	if _sprite == null or data == null or data.frames == null:
+		return false
+	var size: Vector2 = _visual_size()
+	if size.x <= 0.0 or size.y <= 0.0:
+		return false
+	var local_rect: Rect2
+	if _sprite.centered:
+		local_rect = Rect2(-size * 0.5 + _sprite.offset, size)
+	else:
+		local_rect = Rect2(_sprite.offset, size)
+	return local_rect.has_point(_sprite.to_local(get_global_mouse_position()))
 
 
 func _draw() -> void:
@@ -404,7 +550,10 @@ func _draw() -> void:
 		_draw_sight()
 	if data.frames == null:
 		_draw_body()
-	_draw_timer()
+	if _fixing:
+		_draw_fix_bar()
+	else:
+		_draw_timer()
 	var ring_alpha: float = 0.0
 	if _hovered:
 		ring_alpha = 0.9
@@ -441,6 +590,20 @@ func _draw_timer() -> void:
 	var track := Rect2(Vector2(-width * 0.5, top), Vector2(width, height))
 	draw_rect(track, Color(0.0, 0.0, 0.0, 0.55))
 	draw_rect(Rect2(track.position, Vector2(width * ratio, height)), fill)
+
+
+## Cyan bar shown only while a gadget fix is in progress. No sprite needed.
+func _draw_fix_bar() -> void:
+	if _fix_timer_max <= 0.0:
+		return
+	var ratio: float = clampf(_fix_timer / _fix_timer_max, 0.0, 1.0)
+	var visual: Vector2 = _visual_size()
+	var width: float = clampf(visual.x, 32.0, 160.0)
+	var height: float = 5.0
+	var top: float = -visual.y * 0.5 - 14.0
+	var track := Rect2(Vector2(-width * 0.5, top), Vector2(width, height))
+	draw_rect(track, Color(0.0, 0.0, 0.0, 0.7))
+	draw_rect(Rect2(track.position, Vector2(width * ratio, height)), Color(0.35, 0.9, 0.95, 1.0))
 
 
 ## The cone is bright while the hostile actually sees the player, dim while it is

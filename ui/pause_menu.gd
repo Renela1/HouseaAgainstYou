@@ -1,11 +1,13 @@
 class_name PauseMenu
 extends CanvasLayer
-## Top-left pause button plus a drop-down menu. Runs while the tree is paused,
-## freezes the game on open, and restores every state on Restart by reloading
-## the scene after clearing the inventory.
+## Pause overlay laid out like the start menu: full-screen shade, a "Game paused"
+## heading where the logo sits, and the same burgundy button stack.
+##
+## Restart is a fresh run: it reloads the scene and tells the start menu to skip
+## itself. Back to Main Menu reloads and lets the start menu come up instead.
 
 signal paused_changed(is_paused: bool)
-## Emitted just before the scene reload; useful for saving or custom resets.
+## Emitted just before a restart reload; useful for saving or custom resets.
 signal restart_requested
 
 ## Set false in tests to check the reset without actually reloading.
@@ -14,6 +16,7 @@ signal restart_requested
 var _is_open: bool = false
 
 @onready var _shade: ColorRect = $Shade
+@onready var _heading: Label = $Heading
 @onready var _dropdown: VBoxContainer = $Dropdown
 @onready var _pause_button: Button = $PauseButton
 @onready var _back_button: Button = $Dropdown/BackButton
@@ -33,6 +36,16 @@ func _ready() -> void:
 	_show_menu(false)
 	if get_tree().paused:
 		_pause()
+
+
+func _show_menu(value: bool) -> void:
+	_shade.visible = value
+	_heading.visible = value
+	_dropdown.visible = value
+
+
+func is_menu_open() -> bool:
+	return _is_open
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -75,31 +88,31 @@ func _pause() -> void:
 	paused_changed.emit(true)
 
 
-func _show_menu(value: bool) -> void:
-	_shade.visible = value
-	_dropdown.visible = value
-
-
-func is_menu_open() -> bool:
-	return _is_open
-
-
-## Main menu is a placeholder for now, so it only acknowledges the click.
-func _on_back() -> void:
-	_say("Main menu is not set up yet.")
-
-
-## Options is a placeholder for now, so it only acknowledges the click.
+## Placeholder until there is a real options screen.
 func _on_options() -> void:
 	_say("Options are not set up yet.")
 
 
+## Restarts the run: same level, fresh clock, no start menu in between.
 func _on_restart() -> void:
-	get_tree().paused = false
 	_is_open = false
+	get_tree().paused = false
 	_show_menu(false)
 	Inventory.clear()
 	restart_requested.emit()
+	# The flag is the intent; the reload is just how it is carried out.
+	get_tree().root.set_meta("skip_start_menu", true)
+	if perform_reload:
+		get_tree().reload_current_scene()
+
+
+## Leaves the run and goes back to the start screen.
+func _on_back() -> void:
+	_is_open = false
+	get_tree().paused = false
+	_show_menu(false)
+	Inventory.clear()
+	get_tree().root.set_meta("skip_start_menu", false)
 	if perform_reload:
 		get_tree().reload_current_scene()
 

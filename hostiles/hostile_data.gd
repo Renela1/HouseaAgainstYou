@@ -57,6 +57,9 @@ enum Shape {
 @export_range(0.0, 30.0, 0.1) var grace_seconds: float = 2.5
 
 @export_group("Timers")
+## Seconds the player spends fitting the disable gadget before this hostile
+## actually goes DISABLED. 0 = instant. The gadget is spent when the fix starts.
+@export_range(0.0, 30.0, 0.1) var fix_seconds: float = 3.0
 ## Seconds until it wakes on its own while IDLE. The countdown starts when the
 ## game starts and restarts every time the player calms it. 0 = it only ever
 ## wakes when it sees the player.
@@ -72,6 +75,13 @@ enum Shape {
 ## Consume the gadget when it is used.
 @export var disable_consume: bool = false
 
+@export_group("Hover outline")
+## Width in source-texture pixels of the outline drawn while the mouse is over
+## this hostile's sprite. 0 disables the effect. Requires `Frames` above.
+@export_range(0.0, 16.0, 0.5) var hover_outline_width: float = 4.0
+## Outline colour, including its alpha.
+@export var hover_outline_tint: Color = Color(1, 1, 1, 1)
+
 
 ## Hides the fields the current settings do not use. Values are kept.
 func _validate_property(property: Dictionary) -> void:
@@ -80,6 +90,8 @@ func _validate_property(property: Dictionary) -> void:
 		"active_scale":
 			hidden = frames != null
 		"idle_animation", "active_animation", "hide_animation", "disabled_animation":
+			hidden = frames == null
+		"hover_outline_width", "hover_outline_tint":
 			hidden = frames == null
 		"disable_consume":
 			hidden = disable_item == &""

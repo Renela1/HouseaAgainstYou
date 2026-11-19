@@ -1,12 +1,11 @@
-[gd_resource type="Resource" script_class="ButtonSkin" format=3]
+[gd_resource type="Resource" script_class="ButtonSkin" format=3 uid="uid://4rqormbbpjni"]
 
-[ext_resource type="Script" path="res://ui/button_skin.gd" id="1_skin"]
-[ext_resource type="Texture2D" path="res://art/ui/three_state_burgundy_buttons.png" id="2_atlas"]
+[ext_resource type="Script" uid="uid://vjps40k18yey" path="res://ui/button_skin.gd" id="1_skin"]
+[ext_resource type="Texture2D" uid="uid://yrrk5acolfku" path="res://art/ui/three_state_burgundy_buttons.png" id="2_atlas"]
 
 [resource]
 script = ExtResource("1_skin")
 atlas = ExtResource("2_atlas")
-region_normal = Rect2i(279, 26, 1459, 228)
-region_hover = Rect2i(137, 259, 1744, 254)
-region_pressed = Rect2i(279, 522, 1460, 229)
-patch_margin = 30
+region_normal = Rect2i(285, 26, 1447, 228)
+region_hover = Rect2i(286, 274, 1447, 228)
+region_pressed = Rect2i(285, 522, 1447, 228)

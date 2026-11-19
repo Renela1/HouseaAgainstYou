@@ -1,12 +1,12 @@
-[gd_scene format=3]
+[gd_scene load_steps=4 format=3 uid="uid://ck7q6me4fb2r8"]
 
-[ext_resource type="Script" path="res://ui/pause_menu.gd" id="1_menu"]
-[ext_resource type="Script" path="res://ui/three_state_button.gd" id="2_button"]
+[ext_resource type="Script" uid="uid://breyrmu3ye8nu" path="res://ui/pause_menu.gd" id="1_menu"]
+[ext_resource type="Script" uid="uid://dnmjchg2x7dst" path="res://ui/three_state_button.gd" id="2_button"]
 [ext_resource type="Resource" path="res://ui/definitions/burgundy_button.tres" id="3_skin"]
 
 [node name="PauseMenu" type="CanvasLayer"]
-layer = 100
 process_mode = 4
+layer = 100
 script = ExtResource("1_menu")
 
 [node name="Shade" type="ColorRect" parent="."]
@@ -14,8 +14,59 @@ visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-mouse_filter = 0
-color = Color(0, 0, 0, 0.45)
+color = Color(0.06, 0.05, 0.07, 0.82)
+
+[node name="Heading" type="Label" parent="."]
+visible = false
+offset_left = 240.0
+offset_top = 150.0
+offset_right = 1040.0
+offset_bottom = 240.0
+theme_override_colors/font_color = Color(0.96, 0.9, 0.82, 1)
+theme_override_font_sizes/font_size = 48
+text = "Game paused"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Dropdown" type="VBoxContainer" parent="."]
+visible = false
+offset_left = 480.0
+offset_top = 320.0
+offset_right = 800.0
+offset_bottom = 556.0
+theme_override_constants/separation = 12
+
+[node name="BackButton" type="Button" parent="Dropdown"]
+custom_minimum_size = Vector2(320, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Back to Main Menu"
+script = ExtResource("2_button")
+skin = ExtResource("3_skin")
+
+[node name="ResumeButton" type="Button" parent="Dropdown"]
+custom_minimum_size = Vector2(320, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Resume"
+script = ExtResource("2_button")
+skin = ExtResource("3_skin")
+
+[node name="OptionsButton" type="Button" parent="Dropdown"]
+custom_minimum_size = Vector2(320, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Options"
+script = ExtResource("2_button")
+skin = ExtResource("3_skin")
+
+[node name="RestartButton" type="Button" parent="Dropdown"]
+custom_minimum_size = Vector2(320, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Restart"
+script = ExtResource("2_button")
+skin = ExtResource("3_skin")
 
 [node name="PauseButton" type="Button" parent="."]
 offset_left = 16.0
@@ -24,36 +75,3 @@ offset_right = 56.0
 offset_bottom = 56.0
 text = "II"
 script = ExtResource("2_button")
-skin = ExtResource("3_skin")
-
-[node name="Dropdown" type="VBoxContainer" parent="."]
-visible = false
-offset_left = 16.0
-offset_top = 64.0
-offset_right = 248.0
-offset_bottom = 268.0
-theme_override_constants/separation = 6
-
-[node name="BackButton" type="Button" parent="Dropdown"]
-custom_minimum_size = Vector2(232, 44)
-text = "Back to Main Menu"
-script = ExtResource("2_button")
-skin = ExtResource("3_skin")
-
-[node name="ResumeButton" type="Button" parent="Dropdown"]
-custom_minimum_size = Vector2(232, 44)
-text = "Resume"
-script = ExtResource("2_button")
-skin = ExtResource("3_skin")
-
-[node name="OptionsButton" type="Button" parent="Dropdown"]
-custom_minimum_size = Vector2(232, 44)
-text = "Options"
-script = ExtResource("2_button")
-skin = ExtResource("3_skin")
-
-[node name="RestartButton" type="Button" parent="Dropdown"]
-custom_minimum_size = Vector2(232, 44)
-text = "Restart"
-script = ExtResource("2_button")
-skin = ExtResource("3_skin")

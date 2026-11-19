@@ -1,9 +1,8 @@
-[gd_scene format=3 uid="uid://cngg0kiwx2to"]
-[ext_resource type="PackedScene" path="res://ui/pause_menu.tscn" id="26_pause"]
+[gd_scene format=4 uid="uid://cngg0kiwx2to"]
 
 [ext_resource type="Script" uid="uid://qvllqa2ytawa" path="res://player.gd" id="1_0xm2m"]
 [ext_resource type="Shape2D" uid="uid://dc242ktu2ft3b" path="res://player_shape.tres" id="2_h2yge"]
-[ext_resource type="SpriteFrames" path="res://art/player_frames.tres" id="3_1bvp3"]
+[ext_resource type="SpriteFrames" uid="uid://1rwo38o8l6xs" path="res://art/player_frames.tres" id="3_1bvp3"]
 [ext_resource type="Shape2D" uid="uid://35y7bctowhoe" path="res://wall_shape.tres" id="3_h2yge"]
 [ext_resource type="Script" uid="uid://bsj4jj56l5m5g" path="res://components/interact_zone.gd" id="4_4c57u"]
 [ext_resource type="Shape2D" uid="uid://bpj66nopli5mf" path="res://components/interact_range_shape.tres" id="5_efxa6"]
@@ -15,8 +14,10 @@
 [ext_resource type="Resource" uid="uid://duq15n2tihniq" path="res://interactions/definitions/switch.tres" id="14_074og"]
 [ext_resource type="Resource" uid="uid://rv667yqfy4fi" path="res://interactions/definitions/door.tres" id="15_cegan"]
 [ext_resource type="Resource" uid="uid://bk30ut5sp732h" path="res://interactions/definitions/sentry.tres" id="16_82xsv"]
-[ext_resource type="PackedScene" path="res://hostiles/hostile_object.tscn" id="17_hostile"]
+[ext_resource type="PackedScene" uid="uid://cc5w3ynj35xua" path="res://hostiles/hostile_object.tscn" id="17_hostile"]
+[ext_resource type="Script" uid="uid://tf416ktwdba7" path="res://hostiles/hostile_data.gd" id="18_0odxb"]
 [ext_resource type="Resource" uid="uid://deinbc0dv74ji" path="res://hostiles/definitions/fridge.tres" id="18_fridge"]
+[ext_resource type="Texture2D" uid="uid://bj68w6p7x3yqg" path="res://art/Retro TV Static and Glowing Eyes Sprite Sheet.png" id="18_lswn8"]
 [ext_resource type="Resource" path="res://items/definitions/emp_gadget.tres" id="19_gadget"]
 [ext_resource type="PackedScene" path="res://interactions/final_door.tscn" id="20_finaldoor"]
 [ext_resource type="Resource" path="res://interactions/definitions/final_door.tres" id="21_finaldata"]
@@ -24,6 +25,11 @@
 [ext_resource type="Script" uid="uid://bh2a7c3wlttow" path="res://ui/patience_meter.gd" id="23_patience"]
 [ext_resource type="PackedScene" path="res://containers/container_object.tscn" id="24_container"]
 [ext_resource type="Resource" uid="uid://efn4w3n20g1w" path="res://containers/definitions/cabinet.tres" id="25_cabinetdata"]
+[ext_resource type="PackedScene" uid="uid://ck7q6me4fb2r8" path="res://ui/pause_menu.tscn" id="26_pause"]
+[ext_resource type="Texture2D" uid="uid://dl12kdlytr1u4" path="res://art/room/Seamless Dusty Rose Plaster Wall Texture (2).png" id="27_kq58d"]
+[ext_resource type="Script" uid="uid://cjq15njlwagll" path="res://systems/game_timer.gd" id="28_gametimer"]
+[ext_resource type="PackedScene" path="res://ui/game_timer_hud.tscn" id="29_timerhud"]
+[ext_resource type="PackedScene" path="res://ui/start_menu.tscn" id="30_startmenu"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_patience_bg"]
 bg_color = Color(0.1, 0.1, 0.12, 1)
@@ -39,23 +45,144 @@ corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_lswn8"]
+atlas = ExtResource("18_lswn8")
+region = Rect2(720, 0, 240, 398)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a6jrf"]
+atlas = ExtResource("18_lswn8")
+region = Rect2(480, 0, 240, 398)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xuqvo"]
+atlas = ExtResource("18_lswn8")
+region = Rect2(240, 0, 240, 398)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4k2k6"]
+atlas = ExtResource("18_lswn8")
+region = Rect2(0, 0, 240, 392)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jq2sk"]
+atlas = ExtResource("18_lswn8")
+region = Rect2(0, 0, 240, 398)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qsp4k"]
+atlas = ExtResource("18_lswn8")
+region = Rect2(720, 360, 240, 360)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kq58d"]
+atlas = ExtResource("18_lswn8")
+region = Rect2(480, 360, 240, 360)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_seu75"]
+atlas = ExtResource("18_lswn8")
+region = Rect2(240, 360, 240, 360)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_htxhm"]
+atlas = ExtResource("18_lswn8")
+region = Rect2(0, 360, 240, 360)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_0odxb"]
+resource_name = "idle"
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lswn8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a6jrf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xuqvo")
+}],
+"loop": 1,
+"name": &"active",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4k2k6")
+}],
+"loop": 1,
+"name": &"disabled",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jq2sk")
+}],
+"loop": 1,
+"name": &"hide",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qsp4k")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kq58d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_seu75")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_htxhm")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[sub_resource type="Resource" id="Resource_ktapg"]
+script = ExtResource("18_0odxb")
+id = &"TV"
+name = "tv"
+frames = SubResource("SpriteFrames_0odxb")
+sight_angle_deg = 90.0
+disable_item = &"emp_gadget"
+metadata/_custom_type_script = "uid://tf416ktwdba7"
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_seu75"]
+resource_name = "north_wall_h"
+texture = ExtResource("27_kq58d")
+texture_region_size = Vector2i(29, 16)
+0:0/0 = 0
+0:0/0/y_sort_origin = 80
+0:1/0 = 0
+0:1/0/y_sort_origin = 64
+0:2/0 = 0
+0:2/0/y_sort_origin = 48
+0:3/0 = 0
+0:3/0/y_sort_origin = 32
+0:4/0 = 0
+0:4/0/y_sort_origin = 16
+0:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+
+[sub_resource type="TileSet" id="TileSet_5bwbp"]
+occlusion_layer_0/light_mask = 1
+physics_layer_0/collision_layer = 255
+physics_layer_0/collision_mask = 255
+physics_layer_0/collision_priority = 2.0
+sources/1 = SubResource("TileSetAtlasSource_seu75")
+
 [node name="Main" type="Node2D" unique_id=1991856745]
+y_sort_enabled = true
 
 [node name="Player" type="CharacterBody2D" parent="." unique_id=1867231781 groups=["player"]]
 position = Vector2(640, 360)
 script = ExtResource("1_0xm2m")
 
 [node name="Collision" type="CollisionShape2D" parent="Player" unique_id=1267283837]
-position = Vector2(0, -10)
+position = Vector2(14, -18)
 rotation = 0.033161256
 shape = ExtResource("2_h2yge")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="Player" unique_id=1521470242]
-scale = Vector2(1.5, 1.5)
+position = Vector2(11.000015, -25)
+scale = Vector2(0.46603528, 0.46632212)
 sprite_frames = ExtResource("3_1bvp3")
-animation = &"idle"
+animation = &"walk_down"
 autoplay = "idle"
-frame_progress = 0.43522194
+frame_progress = 0.60958153
 offset = Vector2(0, -31)
 
 [node name="InteractRange" type="Area2D" parent="Player" unique_id=161767710]
@@ -64,6 +191,7 @@ collision_mask = 2
 script = ExtResource("4_4c57u")
 
 [node name="Shape" type="CollisionShape2D" parent="Player/InteractRange" unique_id=1958767329]
+position = Vector2(13, -24)
 shape = ExtResource("5_efxa6")
 
 [node name="Camera" type="Camera2D" parent="Player" unique_id=1879646207]
@@ -156,7 +284,7 @@ position = Vector2(420, 250)
 data = ExtResource("14_074og")
 
 [node name="Door" parent="." unique_id=1766542997 instance=ExtResource("13_yaehf")]
-position = Vector2(444, 388)
+position = Vector2(902, 412)
 data = ExtResource("15_cegan")
 
 [node name="Sentry" parent="." unique_id=1565245808 instance=ExtResource("13_yaehf")]
@@ -168,6 +296,10 @@ data = ExtResource("16_82xsv")
 z_index = -1
 position = Vector2(250, 240)
 data = ExtResource("18_fridge")
+
+[node name="Fridge2" parent="." unique_id=1486497412 instance=ExtResource("17_hostile")]
+position = Vector2(541, 137)
+data = SubResource("Resource_ktapg")
 
 [node name="Gadget" parent="." unique_id=1891889351 instance=ExtResource("9_dg77c")]
 position = Vector2(720, 480)
@@ -185,4 +317,19 @@ data = ExtResource("21_finaldata")
 position = Vector2(800, 560)
 data = ExtResource("25_cabinetdata")
 
-[node name="PauseMenu" parent="." instance=ExtResource("26_pause")]
+[node name="PauseMenu" parent="." unique_id=851738330 instance=ExtResource("26_pause")]
+
+[node name="Node2D" type="Node2D" parent="." unique_id=1436975708]
+
+[node name="wall" type="TileMapLayer" parent="." unique_id=1332732259]
+y_sort_enabled = true
+tile_map_data = PackedByteArray("AAAwAA4AAQAAAAAAAAAwAA8AAQAAAAAAAAAwABAAAQAAAAAAAAAwABEAAQAAAAAAAAAwABIAAQAAAAAAAAAwABMAAQAAAAAAAAAxAA4AAQAAAAAAAAAxAA8AAQAAAAAAAAAxABAAAQAAAAAAAAAxABEAAQAAAAAAAAAxABIAAQAAAAAAAAAxABMAAQAAAAAAAAAwABQAAQAAAAAAAAAwABUAAQAAAAAAAAAwABYAAQAAAAAAAAAwABcAAQAAAAAAAAAwABgAAQAAAAAAAAAwABkAAQAAAAAAAAAxABQAAQAAAAAAAAAxABUAAQAAAAAAAAAxABYAAQAAAAAAAAAxABcAAQAAAAAAAAAxABgAAQAAAAAAAAAxABkAAQAAAAAAAAAwABoAAQAAAAAAAAAvAAAAAQAAAAIAAAAvAAEAAQAAAAMAAAAKAAAAAQAAAAIAAAAKAAIAAQAAAAQAAAAIAAAAAQAAAAIAAAAIAAEAAQAAAAMAAAAIAAIAAQAAAAQAAAAJAAAAAQAAAAIAAAAJAAIAAQAAAAQAAAAvAAIAAQAAAAQAAAAKAAEAAQAAAAMAAAAJAAEAAQAAAAMAAAAoAP7/AQAAAAEAAAAoAP//AQAAAAEAAAAoAAAAAQAAAAIAAAAoAAEAAQAAAAMAAAAoAAIAAQAAAAQAAAAnAP7/AQAAAAEAAAAnAP//AQAAAAEAAAAnAAAAAQAAAAIAAAAnAAEAAQAAAAMAAAAnAAIAAQAAAAQAAAAmAP7/AQAAAAEAAAAmAP//AQAAAAEAAAAmAAAAAQAAAAIAAAAmAAEAAQAAAAMAAAAmAAIAAQAAAAQAAAAlAP7/AQAAAAEAAAAlAP//AQAAAAEAAAAlAAAAAQAAAAIAAAAlAAEAAQAAAAMAAAAlAAIAAQAAAAQAAAAkAP7/AQAAAAEAAAAkAP//AQAAAAEAAAAkAAAAAQAAAAIAAAAkAAEAAQAAAAMAAAAkAAIAAQAAAAQAAAAjAP7/AQAAAAEAAAAjAP//AQAAAAEAAAAjAAAAAQAAAAIAAAAjAAEAAQAAAAMAAAAjAAIAAQAAAAQAAAAiAP7/AQAAAAEAAAAiAP//AQAAAAEAAAAiAAAAAQAAAAIAAAAiAAEAAQAAAAMAAAAiAAIAAQAAAAQAAAAhAP7/AQAAAAEAAAAhAP//AQAAAAEAAAAhAAAAAQAAAAIAAAAhAAEAAQAAAAMAAAAhAAIAAQAAAAQAAAAgAP7/AQAAAAEAAAAgAP//AQAAAAEAAAAgAAAAAQAAAAIAAAAgAAEAAQAAAAMAAAAgAAIAAQAAAAQAAAAfAP7/AQAAAAEAAAAfAP//AQAAAAEAAAAfAAAAAQAAAAIAAAAfAAEAAQAAAAMAAAAfAAIAAQAAAAQAAAAeAP7/AQAAAAEAAAAeAP//AQAAAAEAAAAeAAAAAQAAAAIAAAAeAAEAAQAAAAMAAAAeAAIAAQAAAAQAAAAdAP7/AQAAAAEAAAAdAP//AQAAAAEAAAAdAAAAAQAAAAIAAAAdAAEAAQAAAAMAAAAdAAIAAQAAAAQAAAAcAP7/AQAAAAEAAAAcAP//AQAAAAEAAAAcAAAAAQAAAAIAAAAcAAEAAQAAAAMAAAAcAAIAAQAAAAQAAAAbAP7/AQAAAAEAAAAbAP//AQAAAAEAAAAbAAAAAQAAAAIAAAAbAAEAAQAAAAMAAAAbAAIAAQAAAAQAAAAaAP7/AQAAAAEAAAAaAP//AQAAAAEAAAAaAAAAAQAAAAIAAAAaAAEAAQAAAAMAAAAaAAIAAQAAAAQAAAAZAP7/AQAAAAEAAAAZAP//AQAAAAEAAAAZAAAAAQAAAAIAAAAZAAEAAQAAAAMAAAAZAAIAAQAAAAQAAAAYAP7/AQAAAAEAAAAYAP//AQAAAAEAAAAYAAAAAQAAAAIAAAAYAAEAAQAAAAMAAAAYAAIAAQAAAAQAAAAXAP7/AQAAAAEAAAAXAP//AQAAAAEAAAAXAAAAAQAAAAIAAAAXAAEAAQAAAAMAAAAXAAIAAQAAAAQAAAAWAP7/AQAAAAEAAAAWAP//AQAAAAEAAAAWAAAAAQAAAAIAAAAWAAEAAQAAAAMAAAAWAAIAAQAAAAQAAAAVAP7/AQAAAAEAAAAVAP//AQAAAAEAAAAVAAAAAQAAAAIAAAAVAAEAAQAAAAMAAAAVAAIAAQAAAAQAAAApAP7/AQAAAAEAAAApAP//AQAAAAEAAAApAAAAAQAAAAIAAAApAAEAAQAAAAMAAAApAAIAAQAAAAQAAAAqAP7/AQAAAAEAAAAqAP//AQAAAAEAAAAqAAAAAQAAAAIAAAAqAAEAAQAAAAMAAAAqAAIAAQAAAAQAAAArAP7/AQAAAAEAAAArAP//AQAAAAEAAAArAAAAAQAAAAIAAAArAAEAAQAAAAMAAAArAAIAAQAAAAQAAAAsAP7/AQAAAAEAAAAsAP//AQAAAAEAAAAsAAAAAQAAAAIAAAAsAAEAAQAAAAMAAAAsAAIAAQAAAAQAAAAtAP7/AQAAAAEAAAAtAP//AQAAAAEAAAAtAAAAAQAAAAIAAAAtAAEAAQAAAAMAAAAtAAIAAQAAAAQAAAAuAP7/AQAAAAEAAAAuAP//AQAAAAEAAAAuAAAAAQAAAAIAAAAuAAEAAQAAAAMAAAAuAAIAAQAAAAQAAAAvAP7/AQAAAAEAAAAvAP//AQAAAAEAAAAUAP7/AQAAAAEAAAAUAP//AQAAAAEAAAAUAAAAAQAAAAIAAAAUAAEAAQAAAAMAAAAUAAIAAQAAAAQAAAATAP7/AQAAAAEAAAATAP//AQAAAAEAAAATAAAAAQAAAAIAAAATAAEAAQAAAAMAAAATAAIAAQAAAAQAAAASAP7/AQAAAAEAAAASAP//AQAAAAEAAAASAAAAAQAAAAIAAAASAAEAAQAAAAMAAAASAAIAAQAAAAQAAAARAP7/AQAAAAEAAAARAP//AQAAAAEAAAARAAAAAQAAAAIAAAARAAEAAQAAAAMAAAARAAIAAQAAAAQAAAAQAP7/AQAAAAEAAAAQAP//AQAAAAEAAAAQAAAAAQAAAAIAAAAQAAEAAQAAAAMAAAAQAAIAAQAAAAQAAAAPAP7/AQAAAAEAAAAPAP//AQAAAAEAAAAPAAAAAQAAAAIAAAAPAAEAAQAAAAMAAAAPAAIAAQAAAAQAAAAOAP7/AQAAAAEAAAAOAP//AQAAAAEAAAAOAAAAAQAAAAIAAAAOAAEAAQAAAAMAAAAOAAIAAQAAAAQAAAANAP7/AQAAAAEAAAANAP//AQAAAAEAAAANAAAAAQAAAAIAAAANAAEAAQAAAAMAAAANAAIAAQAAAAQAAAAMAP7/AQAAAAEAAAAMAP//AQAAAAEAAAAMAAAAAQAAAAIAAAAMAAEAAQAAAAMAAAAMAAIAAQAAAAQAAAALAP7/AQAAAAEAAAALAP//AQAAAAEAAAALAAAAAQAAAAIAAAALAAEAAQAAAAMAAAALAAIAAQAAAAQAAAAKAP7/AQAAAAEAAAAKAP//AQAAAAEAAAAJAP7/AQAAAAEAAAAJAP//AQAAAAEAAAAIAP7/AQAAAAEAAAAIAP//AQAAAAEAAAAIAP3/AQAAAAEAAAAJAP3/AQAAAAEAAAAKAP3/AQAAAAEAAAALAP3/AQAAAAEAAAAMAP3/AQAAAAEAAAANAP3/AQAAAAEAAAAOAP3/AQAAAAEAAAAPAP3/AQAAAAEAAAAQAP3/AQAAAAEAAAARAP3/AQAAAAEAAAASAP3/AQAAAAEAAAATAP3/AQAAAAEAAAAUAP3/AQAAAAEAAAAVAP3/AQAAAAEAAAAWAP3/AQAAAAEAAAAXAP3/AQAAAAEAAAAYAP3/AQAAAAEAAAAZAP3/AQAAAAEAAAAaAP3/AQAAAAEAAAAbAP3/AQAAAAEAAAAcAP3/AQAAAAEAAAAdAP3/AQAAAAEAAAAeAP3/AQAAAAEAAAAfAP3/AQAAAAEAAAAgAP3/AQAAAAEAAAAhAP3/AQAAAAEAAAAiAP3/AQAAAAEAAAAjAP3/AQAAAAEAAAAkAP3/AQAAAAEAAAAlAP3/AQAAAAEAAAAmAP3/AQAAAAEAAAAnAP3/AQAAAAEAAAAoAP3/AQAAAAEAAAApAP3/AQAAAAEAAAAqAP3/AQAAAAEAAAArAP3/AQAAAAEAAAAsAP3/AQAAAAEAAAAtAP3/AQAAAAEAAAAuAP3/AQAAAAEAAAAvAP3/AQAAAAEAAAAIAPz/AQAAAAEAAAAJAPz/AQAAAAEAAAAKAPz/AQAAAAEAAAALAPz/AQAAAAEAAAAMAPz/AQAAAAEAAAANAPz/AQAAAAEAAAAOAPz/AQAAAAEAAAAPAPz/AQAAAAEAAAAQAPz/AQAAAAEAAAARAPz/AQAAAAEAAAASAPz/AQAAAAEAAAATAPz/AQAAAAEAAAAUAPz/AQAAAAEAAAAVAPz/AQAAAAEAAAAWAPz/AQAAAAEAAAAXAPz/AQAAAAEAAAAYAPz/AQAAAAEAAAAZAPz/AQAAAAEAAAAaAPz/AQAAAAEAAAAbAPz/AQAAAAEAAAAcAPz/AQAAAAEAAAAdAPz/AQAAAAEAAAAeAPz/AQAAAAEAAAAfAPz/AQAAAAEAAAAgAPz/AQAAAAEAAAAhAPz/AQAAAAEAAAAiAPz/AQAAAAEAAAAjAPz/AQAAAAEAAAAkAPz/AQAAAAEAAAAlAPz/AQAAAAEAAAAmAPz/AQAAAAEAAAAnAPz/AQAAAAEAAAAoAPz/AQAAAAEAAAApAPz/AQAAAAEAAAAqAPz/AQAAAAEAAAArAPz/AQAAAAEAAAAsAPz/AQAAAAEAAAAtAPz/AQAAAAEAAAAuAPz/AQAAAAEAAAAvAPz/AQAAAAEAAAAIAPv/AQAAAAAAAAAJAPv/AQAAAAAAAAAKAPv/AQAAAAAAAAALAPv/AQAAAAAAAAAMAPv/AQAAAAAAAAANAPv/AQAAAAAAAAAOAPv/AQAAAAAAAAAPAPv/AQAAAAAAAAAQAPv/AQAAAAAAAAARAPv/AQAAAAAAAAASAPv/AQAAAAAAAAATAPv/AQAAAAAAAAAUAPv/AQAAAAAAAAAVAPv/AQAAAAAAAAAWAPv/AQAAAAAAAAAXAPv/AQAAAAAAAAAYAPv/AQAAAAAAAAAZAPv/AQAAAAAAAAAaAPv/AQAAAAAAAAAbAPv/AQAAAAAAAAAcAPv/AQAAAAAAAAAdAPv/AQAAAAAAAAAeAPv/AQAAAAAAAAAfAPv/AQAAAAAAAAAgAPv/AQAAAAAAAAAhAPv/AQAAAAAAAAAiAPv/AQAAAAAAAAAjAPv/AQAAAAAAAAAkAPv/AQAAAAAAAAAlAPv/AQAAAAAAAAAmAPv/AQAAAAAAAAAnAPv/AQAAAAAAAAAoAPv/AQAAAAAAAAApAPv/AQAAAAAAAAAqAPv/AQAAAAAAAAArAPv/AQAAAAAAAAAsAPv/AQAAAAAAAAAtAPv/AQAAAAAAAAAuAPv/AQAAAAAAAAAvAPv/AQAAAAAAAAA=")
+tile_set = SubResource("TileSet_5bwbp")
+
+[node name="GameTimer" type="Node" parent="." unique_id=1600496099]
+script = ExtResource("28_gametimer")
+
+[node name="TimerHUD" parent="." unique_id=48347896 instance=ExtResource("29_timerhud")]
+
+[node name="StartMenu" parent="." unique_id=564500630 instance=ExtResource("30_startmenu")]
+visible = false

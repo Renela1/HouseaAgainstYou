@@ -1,4 +1,5 @@
 [gd_scene format=3 uid="uid://cngg0kiwx2to"]
+[ext_resource type="PackedScene" path="res://ui/pause_menu.tscn" id="26_pause"]
 
 [ext_resource type="Script" uid="uid://qvllqa2ytawa" path="res://player.gd" id="1_0xm2m"]
 [ext_resource type="Shape2D" uid="uid://dc242ktu2ft3b" path="res://player_shape.tres" id="2_h2yge"]
@@ -22,7 +23,7 @@
 [ext_resource type="Resource" path="res://items/definitions/golden_key.tres" id="22_goldenkey"]
 [ext_resource type="Script" uid="uid://bh2a7c3wlttow" path="res://ui/patience_meter.gd" id="23_patience"]
 [ext_resource type="PackedScene" path="res://containers/container_object.tscn" id="24_container"]
-[ext_resource type="Resource" path="res://containers/definitions/cabinet.tres" id="25_cabinetdata"]
+[ext_resource type="Resource" uid="uid://efn4w3n20g1w" path="res://containers/definitions/cabinet.tres" id="25_cabinetdata"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_patience_bg"]
 bg_color = Color(0.1, 0.1, 0.12, 1)
@@ -180,6 +181,8 @@ item = ExtResource("22_goldenkey")
 position = Vector2(1200, 360)
 data = ExtResource("21_finaldata")
 
-[node name="Cabinet" parent="." instance=ExtResource("24_container")]
+[node name="Cabinet" parent="." unique_id=490821933 instance=ExtResource("24_container")]
 position = Vector2(800, 560)
 data = ExtResource("25_cabinetdata")
+
+[node name="PauseMenu" parent="." instance=ExtResource("26_pause")]

@@ -1,0 +1,59 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ui/pause_menu.gd" id="1_menu"]
+[ext_resource type="Script" path="res://ui/three_state_button.gd" id="2_button"]
+[ext_resource type="Resource" path="res://ui/definitions/burgundy_button.tres" id="3_skin"]
+
+[node name="PauseMenu" type="CanvasLayer"]
+layer = 100
+process_mode = 4
+script = ExtResource("1_menu")
+
+[node name="Shade" type="ColorRect" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 0
+color = Color(0, 0, 0, 0.45)
+
+[node name="PauseButton" type="Button" parent="."]
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 56.0
+offset_bottom = 56.0
+text = "II"
+script = ExtResource("2_button")
+skin = ExtResource("3_skin")
+
+[node name="Dropdown" type="VBoxContainer" parent="."]
+visible = false
+offset_left = 16.0
+offset_top = 64.0
+offset_right = 248.0
+offset_bottom = 268.0
+theme_override_constants/separation = 6
+
+[node name="BackButton" type="Button" parent="Dropdown"]
+custom_minimum_size = Vector2(232, 44)
+text = "Back to Main Menu"
+script = ExtResource("2_button")
+skin = ExtResource("3_skin")
+
+[node name="ResumeButton" type="Button" parent="Dropdown"]
+custom_minimum_size = Vector2(232, 44)
+text = "Resume"
+script = ExtResource("2_button")
+skin = ExtResource("3_skin")
+
+[node name="OptionsButton" type="Button" parent="Dropdown"]
+custom_minimum_size = Vector2(232, 44)
+text = "Options"
+script = ExtResource("2_button")
+skin = ExtResource("3_skin")
+
+[node name="RestartButton" type="Button" parent="Dropdown"]
+custom_minimum_size = Vector2(232, 44)
+text = "Restart"
+script = ExtResource("2_button")
+skin = ExtResource("3_skin")

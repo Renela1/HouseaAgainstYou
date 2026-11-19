@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ButtonSkin" format=3]
+
+[ext_resource type="Script" path="res://ui/button_skin.gd" id="1_skin"]
+[ext_resource type="Texture2D" path="res://art/ui/three_state_burgundy_buttons.png" id="2_atlas"]
+
+[resource]
+script = ExtResource("1_skin")
+atlas = ExtResource("2_atlas")
+region_normal = Rect2i(279, 26, 1459, 228)
+region_hover = Rect2i(137, 259, 1744, 254)
+region_pressed = Rect2i(279, 522, 1460, 229)
+patch_margin = 30

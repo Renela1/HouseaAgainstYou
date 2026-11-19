@@ -92,6 +92,20 @@ before the key is spent or the contents change. `refill()` restores the full
 state. The demo cabinet in `main.tscn` needs the rusty key and holds three coins
 and another key.
 
+### Pause menu
+
+A small burgundy pause button sits in the top-left corner; clicking it or
+pressing **Escape** / **P** freezes the game and drops down four buttons:
+**Back to Main Menu** and **Options** are placeholders that just acknowledge the
+click, **Resume** unfreezes the game, and **Restart** clears the inventory and
+reloads the scene so every object returns to its starting state.
+
+The button artwork is the three-state burgundy tileset in
+`art/ui/three_state_burgundy_buttons.png`. `ui/definitions/burgundy_button.tres`
+maps its rows to normal, hover and pressed regions; edit that one resource to
+change the look of every menu button. `ButtonSkin` also supplies flat-colour
+fallbacks if no atlas is assigned.
+
 ## Verification
 
 A quick headless load should exit cleanly with no script errors:

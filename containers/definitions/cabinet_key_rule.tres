@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="InteractionRule" format=3]
+
+[ext_resource type="Script" path="res://interactions/interaction_rule.gd" id="1_hdq4w"]
+
+[resource]
+script = ExtResource("1_hdq4w")
+label = "Rusty Key"
+requires_key = &"cell_door"
+failure_text = "Locked. The cabinet needs the rusty key."

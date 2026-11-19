@@ -1,0 +1,28 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://art/containers/chest_closed.png" id="1_q5ber"]
+[ext_resource type="Texture2D" path="res://art/containers/chest_open.png" id="2_vrkhr"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_q5ber")
+}],
+"loop": 1,
+"name": &"closed",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_vrkhr")
+}],
+"loop": 1,
+"name": &"open",
+"speed": 5.0
+}]

@@ -38,6 +38,7 @@ no new scripts:
 | `items/` | `ItemData` (one resource per item), `PickableItem`, inventory UI, `definitions/*.tres` |
 | `interactions/` | `InteractableData`, `InteractionRule`, `InteractableObject`, `FinalDoor`, `definitions/*.tres` |
 | `hostiles/` | `HostileData`, `HostileObject`, `definitions/*.tres` |
+| `containers/` | `ContainerData`, `ContainerEntry`, `ContainerObject`, `definitions/*.tres` |
 | `components/` | `InteractZone` — the shared reach/click gatekeeper for pickups, objects and hostiles |
 | `systems/` | `Inventory` autoload (12 slots, item queries, reset) |
 | `ui/` | Inventory HUD and the patience meter |
@@ -72,6 +73,24 @@ own colour and, when a `SpriteFrames` resource is assigned, its own animation
 (`idle`, `active`, `hide`, `disabled`). Hostiles are solid in every state; the
 collision blocker always uses the base size so an active scale change cannot
 push the player around.
+
+### Containers
+
+`ContainerData` definitions in `containers/definitions/` describe the solid
+body, `InteractionRule` conditions (the same key/item rules as interactables), a
+list of `ContainerEntry` resources (item + amount), feedback messages, and a
+`SpriteFrames` set with `closed` / `open` animations. Place an instance of
+`container_object.tscn` in a level, assign its data, and optionally set
+`starts_open` / `starts_full` on the instance.
+
+A container is solid like a fixture in both states. Interacting while **FULL**
+checks the conditions and the bag's remaining room; on success it consumes any
+consumable condition, transfers every item at once, flips to **EMPTY** and
+forces **OPEN**. While EMPTY, interactions only toggle OPEN/CLOSED (conditions
+still apply). If the bag cannot hold all the loot, the interaction is refused
+before the key is spent or the contents change. `refill()` restores the full
+state. The demo cabinet in `main.tscn` needs the rusty key and holds three coins
+and another key.
 
 ## Verification
 

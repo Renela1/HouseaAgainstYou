@@ -21,6 +21,8 @@
 [ext_resource type="Resource" path="res://interactions/definitions/final_door.tres" id="21_finaldata"]
 [ext_resource type="Resource" path="res://items/definitions/golden_key.tres" id="22_goldenkey"]
 [ext_resource type="Script" uid="uid://bh2a7c3wlttow" path="res://ui/patience_meter.gd" id="23_patience"]
+[ext_resource type="PackedScene" path="res://containers/container_object.tscn" id="24_container"]
+[ext_resource type="Resource" path="res://containers/definitions/cabinet.tres" id="25_cabinetdata"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_patience_bg"]
 bg_color = Color(0.1, 0.1, 0.12, 1)
@@ -177,3 +179,7 @@ item = ExtResource("22_goldenkey")
 [node name="FinalDoor" parent="." unique_id=564418462 instance=ExtResource("20_finaldoor")]
 position = Vector2(1200, 360)
 data = ExtResource("21_finaldata")
+
+[node name="Cabinet" parent="." instance=ExtResource("24_container")]
+position = Vector2(800, 560)
+data = ExtResource("25_cabinetdata")

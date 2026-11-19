@@ -57,6 +57,46 @@ func add_item(item: ItemData, quantity: int = 1) -> int:
 	return remaining
 
 
+## True when every {item: ItemData, quantity: int} entry could be added right
+## now, respecting stack caps and free slots. Does not mutate the bag, so a
+## container can check the whole loot before unlocking and losing a key.
+func can_add_all(entries: Array[Dictionary]) -> bool:
+	var simulated: Array[Dictionary] = []
+	for slot in slots:
+		if slot.is_empty():
+			simulated.append({"id": &"", "quantity": 0, "cap": 0})
+		else:
+			simulated.append({"id": slot.item.id, "quantity": slot.quantity, "cap": slot.item.get_stack_cap()})
+	for entry in entries:
+		var item: ItemData = entry.get("item") as ItemData
+		var quantity: int = int(entry.get("quantity", 1))
+		if item == null or quantity <= 0:
+			continue
+		var remaining: int = quantity
+		# Top up matching stacks, then fill empty slots, exactly like add_item().
+		for cell in simulated:
+			if remaining <= 0:
+				break
+			if cell.id != item.id or cell.quantity <= 0:
+				continue
+			var moved: int = mini(cell.cap - cell.quantity, remaining)
+			cell.quantity += moved
+			remaining -= moved
+		for cell in simulated:
+			if remaining <= 0:
+				break
+			if cell.id != &"":
+				continue
+			cell.id = item.id
+			cell.cap = item.get_stack_cap()
+			var moved: int = mini(cell.cap, remaining)
+			cell.quantity = moved
+			remaining -= moved
+		if remaining > 0:
+			return false
+	return true
+
+
 ## Removes up to `quantity` of an item id. Returns how many were actually removed.
 func remove_item(id: StringName, quantity: int = 1) -> int:
 	if quantity <= 0:

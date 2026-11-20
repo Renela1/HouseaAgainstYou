@@ -22,6 +22,7 @@ signal burned_out
 @export var need_key_text: String = "The final door needs the golden key."
 @export var not_safe_text: String = "Not yet — they are still awake."
 @export var escape_text: String = "You escaped."
+@export var victory_text: String = "You won"
 @export var force_text: String = "You force the door open."
 @export var burned_text: String = "Your house was burnt."
 
@@ -47,7 +48,7 @@ func interact(interactor: Node) -> bool:
 		_open()
 		escaped.emit()
 		activated.emit(interactor)
-		_say(escape_text)
+		_show_victory()
 		return true
 	# The house is not quiet yet: wake whatever is still asleep and count it.
 	_wake_hostiles()
@@ -83,6 +84,14 @@ func _wake_hostiles() -> void:
 func _open() -> void:
 	_used = true
 	_apply_success()
+
+
+## Announces the win and opens the pause overlay with "You won" as its heading.
+func _show_victory() -> void:
+	_say(victory_text)
+	var menu: PauseMenu = get_tree().get_first_node_in_group("pause_menu") as PauseMenu
+	if menu != null:
+		menu.show_victory(victory_text)
 
 
 ## Leave anyway, then burn the house and reset the run.

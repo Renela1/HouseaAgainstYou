@@ -40,6 +40,9 @@ enum Shape {
 ## Optional animation set holding one animation per state (names below). When
 ## assigned, the placeholder shape is not drawn.
 @export var frames: SpriteFrames
+## Multiplier applied to the sprite art only, so the drawing can be fitted to the
+## room without moving the body: `size` above keeps driving collision.
+@export var sprite_scale: Vector2 = Vector2.ONE
 @export var idle_animation: StringName = &"idle"
 @export var active_animation: StringName = &"active"
 @export var hide_animation: StringName = &"hide"
@@ -47,6 +50,9 @@ enum Shape {
 
 @export_group("Sight")
 @export var sight_radius: float = 260.0
+## Where the cone points, in degrees, independent of the node's rotation and of
+## the sprite: 0 = right, 90 = down, 180 = left, 270 = up. Wraps past 360.
+@export_range(0.0, 360.0, 1.0) var sight_direction_deg: float = 0.0
 @export_range(1.0, 360.0, 1.0) var sight_angle_deg: float = 80.0
 @export var sight_color: Color = Color(0.95, 0.35, 0.3, 0.16)
 
@@ -90,6 +96,8 @@ func _validate_property(property: Dictionary) -> void:
 		"active_scale":
 			hidden = frames != null
 		"idle_animation", "active_animation", "hide_animation", "disabled_animation":
+			hidden = frames == null
+		"sprite_scale":
 			hidden = frames == null
 		"hover_outline_width", "hover_outline_tint":
 			hidden = frames == null

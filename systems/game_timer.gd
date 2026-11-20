@@ -20,9 +20,9 @@ signal expired
 ## The run is always divided into this many equal stages.
 const STAGES: int = 4
 
-## Length of the whole run in seconds. Stages are always a quarter of it, so 60
-## gives four 15 second stages.
-@export var total_seconds: float = 60.0
+## Length of the whole run in seconds. Stages are always a quarter of it, so 300
+## gives four 75 second stages.
+@export var total_seconds: float = 300.0
 ## Line shown when the clock runs out.
 @export var expired_message: String = "Time's up."
 ## Seconds that line stays up before the scene reloads.

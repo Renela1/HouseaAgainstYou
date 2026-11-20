@@ -95,12 +95,18 @@ func _on_refused(_reason: String) -> void:
 func _apply_success() -> void:
 	_apply_solidity()
 	queue_redraw()
+	var target_rotation: float = deg_to_rad(data.success_rotation_deg)
 	if not data.pulse:
 		scale = data.success_scale
+		rotation = target_rotation
 		return
+	# Pop the body while it swings, so the change reads even without an animation.
 	var tween: Tween = create_tween()
 	tween.tween_property(self, "scale", data.success_scale * 1.12, 0.08)
 	tween.tween_property(self, "scale", data.success_scale, 0.14)
+	var turn: Tween = create_tween()
+	turn.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	turn.tween_property(self, "rotation", target_rotation, 0.22)
 
 
 func _refuse(reason: String) -> void:

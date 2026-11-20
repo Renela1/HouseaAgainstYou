@@ -1,20 +1,109 @@
 [gd_resource type="Resource" script_class="HostileData" format=3 uid="uid://deinbc0dv74ji"]
 
+[ext_resource type="Texture2D" uid="uid://bmhbx2418l60j" path="res://art/Expressive Iron Cartoon Grid (2).png" id="1_3l8jc"]
 [ext_resource type="Script" uid="uid://tf416ktwdba7" path="res://hostiles/hostile_data.gd" id="1_hostiledata"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jykv2"]
+atlas = ExtResource("1_3l8jc")
+region = Rect2(0, 357, 313, 357)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r6768"]
+atlas = ExtResource("1_3l8jc")
+region = Rect2(313, 357, 313, 357)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cxbbc"]
+atlas = ExtResource("1_3l8jc")
+region = Rect2(626, 357, 313, 357)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7o05o"]
+atlas = ExtResource("1_3l8jc")
+region = Rect2(939, 357, 313, 357)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_luff5"]
+atlas = ExtResource("1_3l8jc")
+region = Rect2(0, 0, 313, 357)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ow1xf"]
+atlas = ExtResource("1_3l8jc")
+region = Rect2(313, 0, 313, 357)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_14inv"]
+atlas = ExtResource("1_3l8jc")
+region = Rect2(626, 0, 313, 357)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h5x3h"]
+atlas = ExtResource("1_3l8jc")
+region = Rect2(939, 0, 313, 357)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_gngh3"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jykv2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r6768")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cxbbc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7o05o")
+}],
+"loop": 1,
+"name": &"active",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_luff5")
+}],
+"loop": 1,
+"name": &"disabled",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_luff5")
+}],
+"loop": 1,
+"name": &"hide",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_luff5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ow1xf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_14inv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h5x3h")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 5.0
+}]
 
 [resource]
 script = ExtResource("1_hostiledata")
-id = &"fridge"
-name = "Fridge"
+id = &"iron"
+name = "iron"
 description = "A tall white refrigerator. It watches the room, and its door swings open when it notices you."
 size = Vector2(72, 110)
 idle_color = Color(1, 1, 1, 1)
 active_color = Color(1, 0.97, 0.9, 1)
 disabled_color = Color(0.55, 0.57, 0.6, 1)
 active_scale = Vector2(1.7, 1)
-solid = true
-wake_seconds = 5.0
-disable_seconds = 15.0
+frames = SubResource("SpriteFrames_gngh3")
+sprite_scale = Vector2(0.32, 0.28)
 sight_radius = 240.0
-sight_angle_deg = 140.0
+sight_direction_deg = 65.0
+sight_angle_deg = 156.0
+fix_seconds = 1.2
+wake_seconds = 20.0
+disable_seconds = 30.2
 disable_item = &"emp_gadget"

@@ -1,0 +1,199 @@
+[gd_resource type="Resource" script_class="HostileData" format=3 uid="uid://boch8asyg51c6"]
+
+[ext_resource type="Script" uid="uid://tf416ktwdba7" path="res://hostiles/hostile_data.gd" id="1_52sfd"]
+[ext_resource type="Texture2D" uid="uid://blkgr861hlf8" path="res://art/Playful Refrigerator Animation Sprite Sheet (2).png" id="1_vl2f5"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vl2f5"]
+atlas = ExtResource("1_vl2f5")
+region = Rect2(253, 241, 221, 241)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q18uw"]
+atlas = ExtResource("1_vl2f5")
+region = Rect2(474, 241, 221, 241)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qjyyh"]
+atlas = ExtResource("1_vl2f5")
+region = Rect2(695, 241, 221, 241)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hcxc7"]
+atlas = ExtResource("1_vl2f5")
+region = Rect2(916, 241, 221, 241)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xusv0"]
+atlas = ExtResource("1_vl2f5")
+region = Rect2(1137, 241, 221, 241)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0ylkl"]
+atlas = ExtResource("1_vl2f5")
+region = Rect2(1358, 241, 221, 241)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_trrna"]
+atlas = ExtResource("1_vl2f5")
+region = Rect2(1579, 241, 221, 241)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e3ad5"]
+atlas = ExtResource("1_vl2f5")
+region = Rect2(1800, 241, 221, 241)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lmxc2"]
+atlas = ExtResource("1_vl2f5")
+region = Rect2(32, 482, 221, 241)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_owcsq"]
+atlas = ExtResource("1_vl2f5")
+region = Rect2(253, 482, 221, 241)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fs5re"]
+atlas = ExtResource("1_vl2f5")
+region = Rect2(474, 482, 221, 241)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wnn1d"]
+atlas = ExtResource("1_vl2f5")
+region = Rect2(695, 482, 221, 241)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4ib2x"]
+atlas = ExtResource("1_vl2f5")
+region = Rect2(32, 241, 221, 241)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lxgha"]
+atlas = ExtResource("1_vl2f5")
+region = Rect2(32, 0, 221, 241)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_moyyu"]
+atlas = ExtResource("1_vl2f5")
+region = Rect2(253, 0, 221, 241)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nutye"]
+atlas = ExtResource("1_vl2f5")
+region = Rect2(474, 0, 221, 241)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_andei"]
+atlas = ExtResource("1_vl2f5")
+region = Rect2(695, 0, 221, 241)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kjktn"]
+atlas = ExtResource("1_vl2f5")
+region = Rect2(916, 0, 221, 241)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_obhwj"]
+atlas = ExtResource("1_vl2f5")
+region = Rect2(1137, 0, 221, 241)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r7ahm"]
+atlas = ExtResource("1_vl2f5")
+region = Rect2(1358, 0, 221, 241)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kf1yj"]
+atlas = ExtResource("1_vl2f5")
+region = Rect2(1579, 0, 221, 241)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yjg5i"]
+atlas = ExtResource("1_vl2f5")
+region = Rect2(1800, 0, 221, 241)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_gngh3"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vl2f5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q18uw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qjyyh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hcxc7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xusv0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0ylkl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_trrna")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e3ad5")
+}],
+"loop": 1,
+"name": &"active",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lmxc2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_owcsq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fs5re")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wnn1d")
+}],
+"loop": 1,
+"name": &"disabled",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4ib2x")
+}],
+"loop": 1,
+"name": &"hide",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lxgha")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_moyyu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nutye")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_andei")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kjktn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_obhwj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r7ahm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kf1yj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yjg5i")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[resource]
+script = ExtResource("1_52sfd")
+id = &"iron"
+name = "iron"
+description = "A tall white refrigerator. It watches the room, and its door swings open when it notices you."
+size = Vector2(72, 110)
+idle_color = Color(1, 1, 1, 1)
+active_color = Color(1, 0.97, 0.9, 1)
+disabled_color = Color(0.55, 0.57, 0.6, 1)
+active_scale = Vector2(1.7, 1)
+frames = SubResource("SpriteFrames_gngh3")
+sprite_scale = Vector2(0.7, 0.7)
+sight_radius = 240.0
+sight_direction_deg = 90.0
+sight_angle_deg = 180.0
+fix_seconds = 2.0
+disable_item = &"emp_gadget"

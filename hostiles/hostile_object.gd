@@ -1,3 +1,4 @@
+@tool
 class_name HostileObject
 extends Area2D
 ## Something that watches a cone in front of itself.
@@ -43,7 +44,11 @@ signal fix_started(duration: float)
 signal fix_finished
 
 ## Definition of this hostile. Shared resource — never mutated at runtime.
-@export var data: HostileData
+@export var data: HostileData:
+	set(value):
+		data = value
+		if Engine.is_editor_hint():
+			_setup_editor_preview()
 
 ## Current state. Read it freely; use activate() / calm() / disable() to change it.
 var state: State = State.IDLE
@@ -70,6 +75,9 @@ var _fix_timer_max: float = 0.0
 
 
 func _ready() -> void:
+	if Engine.is_editor_hint():
+		_setup_editor_preview()
+		return
 	add_to_group("hostiles")
 	input_pickable = true
 	_sprite = get_node_or_null("Sprite") as AnimatedSprite2D
@@ -85,6 +93,8 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if Engine.is_editor_hint():
+		return
 	if data == null:
 		return
 	if _fixing:
@@ -109,6 +119,8 @@ func _physics_process(delta: float) -> void:
 
 
 func _process(_delta: float) -> void:
+	if Engine.is_editor_hint():
+		return
 	# Hover is measured against the sprite, not the collision shape, so framed
 	# hostiles highlight over their whole visible body.
 	var now_hovered: bool = _is_mouse_over_sprite()
@@ -116,6 +128,39 @@ func _process(_delta: float) -> void:
 		_hovered = now_hovered
 		queue_redraw()
 	_sync_hover_outline()
+
+
+## Editor-only. The sprite frames come from `data` at runtime, so without this
+## the Sprite node has nothing to draw and the hostile cannot be placed or scaled
+## in the scene view. It shows the idle animation and follows `sprite_scale`
+## whenever the data resource is edited.
+func _setup_editor_preview() -> void:
+	if data != null and not data.changed.is_connected(_refresh_editor_preview):
+		data.changed.connect(_refresh_editor_preview)
+	_refresh_editor_preview()
+
+
+func _refresh_editor_preview() -> void:
+	if not Engine.is_editor_hint() or data == null:
+		return
+	# Repaint first: the sight cone has to follow its direction even on hostiles
+	# that use the placeholder shape instead of sprite frames.
+	queue_redraw()
+	if data.frames == null:
+		return
+	var preview: AnimatedSprite2D = get_node_or_null("Sprite") as AnimatedSprite2D
+	if preview == null:
+		return
+	if preview.sprite_frames != data.frames:
+		preview.sprite_frames = data.frames
+	preview.scale = data.sprite_scale
+	var idle: StringName = data.idle_animation
+	if preview.sprite_frames.has_animation(idle):
+		if preview.animation != idle:
+			preview.animation = idle
+			preview.frame = 0
+		preview.play(idle)
+	queue_redraw()
 
 
 ## Watches the player and enters/leaves HIDE without disturbing the underlying
@@ -378,6 +423,7 @@ func _apply_visuals() -> void:
 	if _sprite != null and data.frames != null:
 		if _sprite.sprite_frames != data.frames:
 			_sprite.sprite_frames = data.frames
+		_sprite.scale = data.sprite_scale
 		var animation: StringName = _current_animation()
 		if _sprite.sprite_frames != null and _sprite.sprite_frames.has_animation(animation):
 			_sprite.play(animation)
@@ -426,6 +472,14 @@ func _input_event(_viewport: Viewport, event: InputEvent, _shape_idx: int) -> vo
 		zone.request_interact(self)
 
 
+## World direction the cone points: the angle set in `data`, plus whatever
+## rotation the node itself carries. Aiming a hostile never moves its sprite.
+func sight_direction() -> Vector2:
+	if data == null:
+		return Vector2.RIGHT
+	return Vector2.RIGHT.rotated(deg_to_rad(data.sight_direction_deg) + global_rotation)
+
+
 ## Inside the cone: within radius and within half the angle of the facing side.
 func _can_see(target: Node2D) -> bool:
 	var offset: Vector2 = target.global_position - global_position
@@ -433,8 +487,7 @@ func _can_see(target: Node2D) -> bool:
 		return false
 	if data.sight_angle_deg >= 359.9:
 		return true
-	var facing: Vector2 = Vector2.RIGHT.rotated(global_rotation)
-	return absf(rad_to_deg(facing.angle_to(offset))) <= data.sight_angle_deg * 0.5
+	return absf(rad_to_deg(sight_direction().angle_to(offset))) <= data.sight_angle_deg * 0.5
 
 
 func _resize_shape() -> void:
@@ -618,10 +671,12 @@ func _draw_sight() -> void:
 		draw_circle(Vector2.ZERO, data.sight_radius, cone_color)
 		return
 	var half: float = deg_to_rad(data.sight_angle_deg) * 0.5
+	# Drawn in local space, so the node's own rotation is already applied.
+	var aim: float = deg_to_rad(data.sight_direction_deg)
 	var points := PackedVector2Array()
 	points.append(Vector2.ZERO)
 	var steps: int = 20
 	for i in steps + 1:
 		var angle: float = -half + (half * 2.0) * float(i) / float(steps)
-		points.append(Vector2.RIGHT.rotated(angle) * data.sight_radius)
+		points.append(Vector2.RIGHT.rotated(aim + angle) * data.sight_radius)
 	draw_colored_polygon(points, cone_color)

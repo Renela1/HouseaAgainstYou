@@ -39,12 +39,15 @@ enum Shape {
 ## Shown when the object is used but no rule failed (e.g. it is already spent).
 @export var refusal_text: String = "Nothing happens."
 
-@export_group("Success effect")
+@export_group("Success transformation")
 ## Body colour after a successful interaction.
 @export var success_color: Color = Color(0.42, 0.82, 0.48)
 ## Body scale after a successful interaction — a cheap "shape change".
 @export var success_scale: Vector2 = Vector2(1.0, 0.72)
-## Pop the body while it changes.
+## Body rotation after a successful interaction, in degrees. A door swings open
+## with 90 (or -90 for the other way); 0 leaves it facing as authored.
+@export_range(-360.0, 360.0, 1.0) var success_rotation_deg: float = 0.0
+## Animate into the transformation instead of snapping to it.
 @export var pulse: bool = true
 
 @export_group("Look")

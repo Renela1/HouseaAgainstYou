@@ -1,7 +1,8 @@
 class_name PauseMenu
 extends CanvasLayer
 ## Pause overlay laid out like the start menu: full-screen shade, a "Game paused"
-## heading where the logo sits, and the same burgundy button stack.
+## heading where the logo sits, and the same burgundy button stack. The same
+## overlay doubles as the victory screen through show_victory().
 ##
 ## Restart is a fresh run: it reloads the scene and tells the start menu to skip
 ## itself. Back to Main Menu reloads and lets the start menu come up instead.
@@ -28,6 +29,7 @@ var _is_open: bool = false
 func _ready() -> void:
 	# CanvasLayers inherit by default; this one must keep processing while paused.
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	add_to_group("pause_menu")
 	_pause_button.pressed.connect(toggle_menu)
 	_back_button.pressed.connect(_on_back)
 	_resume_button.pressed.connect(resume)
@@ -67,6 +69,15 @@ func toggle_menu() -> void:
 
 
 func pause() -> void:
+	if _is_open:
+		return
+	_heading.text = "Game paused"
+	_pause()
+
+
+## Opens the same overlay as a victory screen, with the heading replaced.
+func show_victory(message: String = "You won") -> void:
+	_heading.text = message
 	if _is_open:
 		return
 	_pause()
